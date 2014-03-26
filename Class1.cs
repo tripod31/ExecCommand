@@ -10,8 +10,8 @@ using System.Runtime.Remoting.Channels.Ipc;
 namespace ClassLibraryForVBA
 {
     [System.Runtime.InteropServices.ComVisible(true)]
-    //[System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
-    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDual)]
+    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
+    //[System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDual)]
     [Guid(ExecCommand.ClassId)]
     public class ExecCommand:IExecCommand
     {
