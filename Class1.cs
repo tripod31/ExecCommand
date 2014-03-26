@@ -97,12 +97,14 @@ namespace ClassLibraryForVBA
             return 0;
         }
 
+        ///////////////////////////////////////////
         // IPC関係
+
         public class RemoteObject : MarshalByRefObject
         {
             public string Data { get; set; }
         }
-        RemoteObject m_remoteObject;    // 共有オブジェクト
+        RemoteObject m_remoteObject;    // サーバー側共有オブジェクト
 
         // サーバー側初期化
         public void InitRemoteServer()

@@ -6,3 +6,6 @@ $obj->InitRemoteClient();
 
 my $msg=$obj->{"RemoteData"};
 print "[client]msg from server:[$msg]\n";
+$obj->{"RemoteData"} = "[client]Hello!";
+
+
