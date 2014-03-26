@@ -102,7 +102,7 @@ namespace ClassLibraryForVBA
         {
             public string Data { get; set; }
         }
-        RemoteObject remoteObject;    // 共有オブジェクト
+        RemoteObject m_remoteObject;    // 共有オブジェクト
 
         // サーバー側初期化
         public void InitRemoteServer()
@@ -115,9 +115,22 @@ namespace ClassLibraryForVBA
             ChannelServices.RegisterChannel(channel, true);
 
             //やり取りするオブジェクトを生成して登録.
-            RemoteObject ipcObject= new RemoteObject();
-            RemotingServices.Marshal(ipcObject,"vba-data");
+            m_remoteObject= new RemoteObject();
+            RemotingServices.Marshal(m_remoteObject,"vba-data");
 
+        }
+
+        // サーバー側データアクセスプロパティ
+        public string RemoteData4Server
+        {
+            get
+            {
+                return m_remoteObject.Data;
+            }
+            set
+            {
+                m_remoteObject.Data = value;
+            }
         }
 
         // クライアント側初期化
@@ -130,26 +143,26 @@ namespace ClassLibraryForVBA
             ChannelServices.RegisterChannel(channel, true);
         }
 
-        // クライアント側データアクセス
-        public string RemoteData
+        // クライアント側データアクセスプロパティ
+        public string RemoteData4Client
         {
             get
             {
                 //リモートオブジェクトを取得
                 //URIは"/チャンネル名/公開名"になる.
-                RemoteObject ipcObject = Activator.GetObject
+                RemoteObject remoteObject = Activator.GetObject
                     (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
 
-                return ipcObject.Data;
+                return remoteObject.Data;
             }
             set
             {
                 //リモートオブジェクトを取得
                 //URIは"/チャンネル名/公開名"になる.
-                RemoteObject ipcObject = Activator.GetObject
+                RemoteObject remoteObject = Activator.GetObject
                     (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
 
-                ipcObject.Data=value;
+                remoteObject.Data=value;
             }
         }
 
