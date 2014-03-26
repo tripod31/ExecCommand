@@ -121,7 +121,7 @@ namespace ClassLibraryForVBA
         }
 
         // サーバー側データアクセスプロパティ
-        public string RemoteData4Server
+        public string ServerData
         {
             get
             {
@@ -144,7 +144,7 @@ namespace ClassLibraryForVBA
         }
 
         // クライアント側データアクセスプロパティ
-        public string RemoteData4Client
+        public string RemoteData
         {
             get
             {

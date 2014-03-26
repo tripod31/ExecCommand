@@ -46,13 +46,13 @@ namespace ClassLibraryForVBA
         int Exec();
 
         void InitRemoteServer();
-        string RemoteData4Server
+        string ServerData
         {
             get;
             set;
         }
         void InitRemoteClient();
-        string RemoteData4Client
+        string RemoteData
         {
             get;
             set;
