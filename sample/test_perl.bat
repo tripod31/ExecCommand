@@ -1,2 +1,0 @@
-perl test.pl
-pause

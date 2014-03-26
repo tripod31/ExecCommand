@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Ipc;
 
 namespace ClassLibraryForVBA
 {
@@ -93,5 +96,75 @@ namespace ClassLibraryForVBA
             this.stderr = stderr;
             return 0;
         }
+
+        // IPC関係
+        public class RemoteObject : MarshalByRefObject
+        {
+            public string Data { get; set; }
+        }
+        RemoteObject m_remoteObject;    // 共有オブジェクト
+
+        // サーバー側初期化
+        public void InitRemoteServer()
+        {
+
+            //サーバサイドのチャンネルを生成.
+            IpcServerChannel channel = new IpcServerChannel("vba-channel");
+            
+            //チャンネルを登録.
+            ChannelServices.RegisterChannel(channel, true);
+
+            //やり取りするオブジェクトを生成して登録.
+            m_remoteObject= new RemoteObject();
+            RemotingServices.Marshal(m_remoteObject,"vba-data");
+
+        }
+
+        // サーバー側データアクセスプロパティ
+        public string ServerData
+        {
+            get
+            {
+                return m_remoteObject.Data;
+            }
+            set
+            {
+                m_remoteObject.Data = value;
+            }
+        }
+
+        // クライアント側初期化
+        public void InitRemoteClient()
+        {
+            //クライアントサイドのチャンネルを生成.
+            IpcClientChannel channel = new IpcClientChannel();
+
+            //チャンネルを登録
+            ChannelServices.RegisterChannel(channel, true);
+        }
+
+        // クライアント側データアクセスプロパティ
+        public string RemoteData
+        {
+            get
+            {
+                //リモートオブジェクトを取得
+                //URIは"/チャンネル名/公開名"になる.
+                RemoteObject remoteObject = Activator.GetObject
+                    (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
+
+                return remoteObject.Data;
+            }
+            set
+            {
+                //リモートオブジェクトを取得
+                //URIは"/チャンネル名/公開名"になる.
+                RemoteObject remoteObject = Activator.GetObject
+                    (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
+
+                remoteObject.Data=value;
+            }
+        }
+
     }
 }
