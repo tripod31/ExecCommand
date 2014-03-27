@@ -9,6 +9,9 @@ $obj->{"ServerData"}="[server]hello!";
 $obj->{ExeFile}="perl";
 $obj->{Arg}="test_client.pl";
 $obj->Exec();
+my $msg;
+$msg= $obj->{StdOut};
+print "[server]client output:$msg:\n";
 
-my $msg = $obj->{"ServerData"};
+$msg = $obj->{"ServerData"};
 print "[server]msg from client:$msg\n";
