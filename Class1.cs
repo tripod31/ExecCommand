@@ -24,9 +24,9 @@ namespace ClassLibraryForVBA
     {
         private string exeFile;
         private string arg;
-        private string stdout;
-        private string stderr;
-        private string err;
+        private string stdout="";
+        private string stderr="";
+        private string err="";
 
         //実行ファイルパス
         public string ExeFile
@@ -109,18 +109,27 @@ namespace ClassLibraryForVBA
         RemoteObject m_remoteObject;    // サーバー側共有オブジェクト
 
         // サーバー側初期化
-        public void InitRemoteServer()
+        public int InitRemoteServer()
         {
+            try
+            {
+                //サーバサイドのチャンネルを生成.
+                IpcServerChannel channel = new IpcServerChannel("vba-channel");
 
-            //サーバサイドのチャンネルを生成.
-            IpcServerChannel channel = new IpcServerChannel("vba-channel");
-            
-            //チャンネルを登録.
-            ChannelServices.RegisterChannel(channel, true);
+                //チャンネルを登録.
+                ChannelServices.RegisterChannel(channel, true);
 
-            //やり取りするオブジェクトを生成して登録.
-            m_remoteObject= new RemoteObject();
-            RemotingServices.Marshal(m_remoteObject,"vba-data");
+                //やり取りするオブジェクトを生成して登録.
+                m_remoteObject = new RemoteObject();
+                RemotingServices.Marshal(m_remoteObject, "vba-data");
+            }
+            catch (Exception e)
+            {
+                this.err = "サーバー初期化時エラー:" + e.Message;
+                return -1;
+            }
+
+            return 0;
 
         }
 
@@ -138,13 +147,22 @@ namespace ClassLibraryForVBA
         }
 
         // クライアント側初期化
-        public void InitRemoteClient()
+        public int InitRemoteClient()
         {
-            //クライアントサイドのチャンネルを生成.
-            IpcClientChannel channel = new IpcClientChannel();
+            try
+            {
+                //クライアントサイドのチャンネルを生成.
+                IpcClientChannel channel = new IpcClientChannel();
 
-            //チャンネルを登録
-            ChannelServices.RegisterChannel(channel, true);
+                //チャンネルを登録
+                ChannelServices.RegisterChannel(channel, true);
+            }
+            catch (Exception e)
+            {
+                this.err = "クライアント初期化時エラー:" + e.Message;
+                return -1;
+            }
+            return 0;
         }
 
         // クライアント側データアクセスプロパティ
@@ -152,21 +170,37 @@ namespace ClassLibraryForVBA
         {
             get
             {
-                //リモートオブジェクトを取得
-                //URIは"/チャンネル名/公開名"になる.
-                RemoteObject remoteObject = Activator.GetObject
-                    (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
-
+                RemoteObject remoteObject;
+                try
+                {
+                    //リモートオブジェクトを取得
+                    //URIは"/チャンネル名/公開名"になる.
+                    remoteObject = Activator.GetObject
+                        (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
+                }
+                catch (Exception e)
+                {
+                    this.err = "リモートデータ取得時エラー:" + e.Message;
+                    return "";
+                }
                 return remoteObject.Data;
             }
             set
             {
-                //リモートオブジェクトを取得
-                //URIは"/チャンネル名/公開名"になる.
-                RemoteObject remoteObject = Activator.GetObject
-                    (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
+                RemoteObject remoteObject;
+                try
+                {
+                    //リモートオブジェクトを取得
+                    //URIは"/チャンネル名/公開名"になる.
+                    remoteObject = Activator.GetObject
+                        (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
+                    remoteObject.Data=value;
+                }
+                catch (Exception e)
+                {
+                    this.err = "リモートデータ設定時エラー:" + e.Message;
+                }
 
-                remoteObject.Data=value;
             }
         }
 

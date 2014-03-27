@@ -45,13 +45,13 @@ namespace ClassLibraryForVBA
         //  -1  コマンド起動時エラー
         int Exec();
 
-        void InitRemoteServer();
+        int InitRemoteServer();
         string ServerData
         {
             get;
             set;
         }
-        void InitRemoteClient();
+        int InitRemoteClient();
         string RemoteData
         {
             get;
