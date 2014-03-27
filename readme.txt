@@ -18,7 +18,7 @@ Excel2007
 ■インストール
 ・ClassLibraryForVBA.zipをインストールするフォルダに解凍します
 ・DLLのレジストリへの登録
-Windows7の場合、管理者でregist_dll.batを実行する。
+regist_dll.batを実行する。WindowsVista以降の場合、管理者で実行。
 バッチファイル中のregasm.exeのパスを修正する必要があるかも。
 
 【登録時にエラーが出る場合】
