@@ -12,7 +12,7 @@ Excel VBAからperlを起動して標準出力を得るためにWindowsScripting
 ■開発・動作確認環境
 Windows7
 Microsoft VisualStudioExpress 2013forWindowsDesktop
-.NET Framework 2
+.NET Framework 4.5(4.0向けにビルド)
 Excel2007
 
 ■インストール
