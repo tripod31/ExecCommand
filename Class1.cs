@@ -15,14 +15,13 @@ namespace ClassLibraryForVBA
     }
 
 
-    [System.Runtime.InteropServices.ComVisible(true)]
-    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
+    //[System.Runtime.InteropServices.ComVisible(true)]
+    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
+    //[System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
     //[System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDual)]
-    [Guid(ExecCommand.ClassId)]
+    [Guid("098F1F11-4B55-4D66-A5FE-AD4EF0245D34")]
     public class ExecCommand:IExecCommand
     {
-        public const string ClassId = "098F1F11-4B55-4D66-A5FE-AD4EF0245D34";
-
         private string exeFile;
         private string arg;
         private string stdout;

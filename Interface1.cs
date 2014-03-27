@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 
 namespace ClassLibraryForVBA
 {
-    [System.Runtime.InteropServices.ComVisible(true)]
-    [System.Runtime.InteropServices.InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
+    //[System.Runtime.InteropServices.ComVisible(true)]
+    //[System.Runtime.InteropServices.InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
     [System.Runtime.InteropServices.Guid("3F5CE45D-7F4F-4B49-9D9B-CE20732B8A1F")]
     public interface IExecCommand
     {
