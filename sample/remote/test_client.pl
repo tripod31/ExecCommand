@@ -5,7 +5,7 @@ my $obj = Win32::OLE->new('ClassLibraryForVBA.ExecCommand') ;
 $obj->InitRemoteClient();
 
 my $msg=$obj->{"RemoteData"};
-print "[client]msg from server:[$msg]";
+print "[client]msg from server->$msg<-";
 $obj->{"RemoteData"} = "[client]Hello!";
 
 

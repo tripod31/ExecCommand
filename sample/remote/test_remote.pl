@@ -14,4 +14,4 @@ $msg= $obj->{StdOut};
 print "[server]client output:$msg:\n";
 
 $msg = $obj->{"ServerData"};
-print "[server]msg from client:$msg\n";
+print "[server]msg from client->$msg<-\n";
