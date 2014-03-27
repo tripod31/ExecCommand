@@ -177,13 +177,14 @@ namespace ClassLibraryForVBA
                     //URIは"/チャンネル名/公開名"になる.
                     remoteObject = Activator.GetObject
                         (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
+                    return remoteObject.Data;
                 }
                 catch (Exception e)
                 {
                     this.err = "リモートデータ取得時エラー:" + e.Message;
                     return "";
                 }
-                return remoteObject.Data;
+
             }
             set
             {
