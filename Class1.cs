@@ -9,6 +9,12 @@ using System.Runtime.Remoting.Channels.Ipc;
 
 namespace ClassLibraryForVBA
 {
+    public class RemoteObject : MarshalByRefObject
+    {
+        public string Data { get; set; }
+    }
+
+
     [System.Runtime.InteropServices.ComVisible(true)]
     [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
     //[System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDual)]
@@ -100,10 +106,7 @@ namespace ClassLibraryForVBA
         ///////////////////////////////////////////
         // IPC関係
 
-        public class RemoteObject : MarshalByRefObject
-        {
-            public string Data { get; set; }
-        }
+ 
         RemoteObject m_remoteObject;    // サーバー側共有オブジェクト
 
         // サーバー側初期化
