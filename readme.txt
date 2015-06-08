@@ -32,6 +32,7 @@ C:\Windows\winsxs\x86_microsoft-windows-ie-ieshims_31bf3856ad364e35_9.4.8112.164
 これをシステムパスに追加したところ、エラーが出なくなり、登録できました。
 
 ■VBAからの使用例
+・DOS窓を出さずにCUIコマンドを起動する
 pingコマンドの出力を表示します。
 
 Sub test()
