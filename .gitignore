@@ -7,7 +7,6 @@ geany_run_script.bat
 *.pydevproject
 .project
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
@@ -46,10 +45,10 @@ local.properties
 # Build results
 
 [Dd]ebug/
-[Rr]elease/
+#[Rr]elease/
 x64/
 build/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
 
 # MSTest test Results
