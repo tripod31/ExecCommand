@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace ClassLibraryForVBA
+namespace ExecCommand
 {
     //[System.Runtime.InteropServices.ComVisible(true)]
     //[System.Runtime.InteropServices.InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]

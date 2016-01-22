@@ -10,13 +10,12 @@ Excel VBAからperlを起動して標準出力を得るためにWindowsScripting
 プロセスが親子関係である必要はありません。
 
 ■開発・動作確認環境
-Windows7
-Microsoft VisualStudioExpress 2013forWindowsDesktop
+Windows10
+Microsoft VisualStudio Express 2015forWindowsDesktop
 .NET Framework 4.5(4.0向けにビルド)
 Excel2007
 
 ■インストール
-・ClassLibraryForVBA.zipをインストールするフォルダに解凍します
 ・DLLのレジストリへの登録
 regist_dll.batを実行する。WindowsVista以降の場合、管理者で実行。
 バッチファイル中のregasm.exeのパスを修正する必要があるかも。
@@ -24,7 +23,7 @@ regist_dll.batを実行する。WindowsVista以降の場合、管理者で実行
 【登録時にエラーが出る場合】
 Windows7+IE9の環境で、次のエラーがでました。
 
-RegAsm : error RA0000 : 入力アセンブリ 'ClassLibraryForVBA.dll' またはその依存関
+RegAsm : error RA0000 : 入力アセンブリ 'ExecCommand.dll' またはその依存関
 係の 1 つが見つかりません。
 
 IESHIMS.DLLを検索してパスを登録します。検索するといくつか出てきました。最新のファイルの場所は以下の場所でした。
@@ -39,7 +38,7 @@ Sub test()
     Dim obj As Object
     Dim iRet As Integer
     
-    Set obj = CreateObject("ClassLibraryForVBA.ExecCommand")
+    Set obj = CreateObject("ExecCommand.ExecCommand")
     obj.exeFile = "ping.exe"
     obj.arg = "localhost -n 1"
     iRet = obj.Exec

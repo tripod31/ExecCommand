@@ -7,7 +7,7 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
 
-namespace ClassLibraryForVBA
+namespace ExecCommand
 {
     public class RemoteObject : MarshalByRefObject
     {
