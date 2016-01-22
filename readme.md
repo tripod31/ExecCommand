@@ -22,10 +22,8 @@ Excel2007
 
 インストール
 -----
-####以下のファイルをダウンロード
-    bin/release/ExecCommand.dll  
-    regist_dll.bat  
-    unregist_dll.bat  
+####ファイルをダウンロードして展開
+「Download ZIP」のリンクからダウンロード
 
 ####DLLのレジストリへの登録
 regist_dll.batを実行する。WindowsVista以降の場合、管理者で実行。  
