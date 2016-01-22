@@ -45,21 +45,21 @@ VBAからの使用例
 ####DOS窓を出さずにCUIコマンドを起動する
 pingコマンドの出力を表示します。
 
-Sub test()
-    Dim obj As Object
-    Dim iRet As Integer
+	Sub test()
+		Dim obj As Object
+		Dim iRet As Integer
     
-    Set obj = CreateObject("ExecCommand.ExecCommand")
-    obj.exeFile = "ping.exe"
-    obj.arg = "localhost -n 1"
-    iRet = obj.Exec
+		Set obj = CreateObject("ExecCommand.ExecCommand")
+		obj.exeFile = "ping.exe"
+		obj.arg = "localhost -n 1"
+		iRet = obj.Exec
     
-    If iRet <> 0 Then
-        'コマンド起動時エラー
-        MsgBox obj.Err
-        Exit Sub
-    End If
+		If iRet <> 0 Then
+			'コマンド起動時エラー
+			MsgBox obj.Err
+			Exit Sub
+		End If
     
-    MsgBox "標準出力->" & obj.stdout & "<-" & vbCrLf & "標準エラー->" & obj.stderr & "<-"
+		MsgBox "標準出力->" & obj.stdout & "<-" & vbCrLf & "標準エラー->" & obj.stderr & "<-"
     
-End Sub
+	End Sub
