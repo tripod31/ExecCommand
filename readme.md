@@ -29,15 +29,6 @@ Excel2007
 regist_dll.batを実行する。WindowsVista以降の場合、管理者で実行。  
 バッチファイル中のregasm.exeのパスを修正する必要があるかも。  
 
-####登録時にエラーが出る場合  
-Windows7+IE9の環境で、次のエラーがでました。  
-
-    RegAsm : error RA0000 : 入力アセンブリ 'ExecCommand.dll' またはその依存関係の 1 つが見つかりません。  
-
-IESHIMS.DLLを検索してパスを登録します。検索するといくつか出てきました。最新のファイルの場所は以下の場所でした。  
-C:\Windows\winsxs\x86_microsoft-windows-ie-ieshims_31bf3856ad364e35_9.4.8112.16476_none_5fdbc489b4a35eb0  
-これをシステムパスに追加したところ、エラーが出なくなり、登録できました。
-
 VBAからの使用例
 -----
 ####DOS窓を出さずにCUIコマンドを起動する
