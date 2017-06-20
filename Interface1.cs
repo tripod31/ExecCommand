@@ -5,9 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace ExecCommand
 {
-    //[System.Runtime.InteropServices.ComVisible(true)]
-    //[System.Runtime.InteropServices.InterfaceType(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsDual)]
-    [System.Runtime.InteropServices.Guid("3F5CE45D-7F4F-4B49-9D9B-CE20732B8A1F")]
+    [Guid("3F5CE45D-7F4F-4B49-9D9B-CE20732B8A1F")]
     public interface IExecCommand
     {
         //実行ファイルパス
@@ -45,17 +43,43 @@ namespace ExecCommand
         //  -1  コマンド起動時エラー
         int Exec();
 
-        int InitRemoteServer();
+    }
+
+    [Guid("28667748-9DCA-4D31-8A0F-FB4BEDBD08FF")]
+    public interface IReomoteServer { 
+
+
+        string Err
+        {
+            get;
+        }
+
         string ServerData
         {
             get;
             set;
         }
-        int InitRemoteClient();
+        int InitRemoteServer();
+        int CloseRemoteServer();
+
+    }
+
+    [Guid("AC4B6BC1-5DB1-411D-A8A1-8705CAD32B4E")]
+    public interface IRemoteClient
+    {
+
+
+        string Err
+        {
+            get;
+        }
+
         string RemoteData
         {
             get;
             set;
         }
+        int InitRemoteClient();
     }
+
 }

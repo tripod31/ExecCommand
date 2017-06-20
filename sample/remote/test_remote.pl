@@ -1,30 +1,42 @@
 use strict;
 
 use Win32::OLE qw(in with);
-my $obj = Win32::OLE->new('ExecCommand.ExecCommand') ;
-$obj->InitRemoteServer();
-$obj->{"ServerData"}="ARGUMENT";
+my $oServer = Win32::OLE->new('ExecCommand.RemoteServer') ;
+my $i=$oServer->InitRemoteServer();
+if ($i !=0){
+    print("err at init server:". $oServer->{Err});
+    exit(-1);
+}
+$oServer->{"ServerData"}="ARGUMENT";
 
 #クライアント実行
-$obj->{ExeFile}="perl";
-$obj->{Arg}="test_client.pl";
-my $i=$obj->Exec();
-if ($i!=0) {
-    print("failed to run test_client.pl");
+if (! -f "test_client.pl"){
+    print("test_client.pl not found.\n");
     exit(-1);
 }
 
-my $msg;
-$msg= $obj->{StdOut};
-if ($msg eq "ARGUMENT"){
-    print "Argument was passed succeccfully.\n";
-}else{
-    print "Argument was'nt passed.";
+my $oExec = Win32::OLE->new('ExecCommand.ExecCommand') ;
+$oExec->{ExeFile}="perl";
+$oExec->{Arg}="test_client.pl";
+my $i=$oExec->Exec();
+if ($i!=0) {
+    print("err at exec test_client.pl".$oExec->{Err});
+    exit(-1);
 }
 
-$msg = $obj->{"ServerData"};
-if ($msg eq "RETURN"){
-    print "Return value was passed succeccfully.\n";
+print $oExec->{StdErr};
+my $msg;
+$msg= $oExec->{StdOut};
+
+if ($msg eq "ARGUMENT"){
+    print sprintf("Argument[%s] was passed succeccfully.\n",$msg);
 }else{
-    print "Return value was'nt passed.";
+    print sprintf("Argument was'nt passed.[%s]\n",$msg);
+}
+
+$msg = $oServer->{"ServerData"};
+if ($msg eq "RETURN"){
+    print sprintf("Return value[%s] was passed succeccfully.\n",$msg);
+}else{
+    print sprintf("Return value was'nt passed.[%s]\n",$msg);
 }
