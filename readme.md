@@ -9,11 +9,9 @@ Excel VBAからperlを起動して標準出力を得るためにWindowsScripting
 そのため、C#でコマンドを起動するCOMオブジェクトを作成しました。  
 コマンドの終了を待ち、標準出力・標準エラーを取得します。DOS窓は表示しません。
 
-<!--
 #### プロセス間通信
 親プロセスから子プロセスに(ExcelからPerlなど）、コマンドラインで渡すのが難しい大きな文字列を渡すためにプロセス間通信をサポートしました。  
 プロセスが親子関係である必要はありません。
--->
 
 開発・動作確認環境
 -----
@@ -55,27 +53,61 @@ pingコマンドの出力を表示します。
 
 	End Sub
 
-<!--
 #### プロセス間通信
 
 	Sub test_remote()
 	    Dim obj As Object
 	    Dim iRet As Integer
 	    Dim msg As String
+	    Dim sPath As String
+	    Dim sDir As String
+	    Dim oServer
+	    Dim oExec
 
-	    Set obj = CreateObject("ExecCommand.ExecCommand")
+	    Set oServer = CreateObject("ExecCommand.RemoteServer")
 
-	    obj.InitRemoteServer
-	    obj.ServerData = "[server]hello!"
+	    iRet = oServer.init
+	        If iRet <> 0 Then
+	        MsgBox oServer.Err
+	        Exit Sub
+	    End If
+
+	    oServer.Data = "ARGUMENT"
 
 	    'クライアント起動
-	    obj.ExeFile = "perl"
-	    obj.Arg = "test_client.pl"
-	    obj.Exec
+	    sPath = convertFromURL(ThisComponent.Location)
+	    sDir = Left(sPath, Len(sPath) - 9)
+	    'sDir = ThisWorkbook.Path
 
-	    msg = "[server]client output:" & obj.stdout & vbCrLf & "[server]msg from client" & obj.ServerData
+	    Set oExec = CreateObject("ExecCommand.ExecCommand")
+	    oExec.ExeFile = "perl"
+	    oExec.Arg = sDir & "\remote\test_client.pl"
+	    iRet = oExec.Exec
+	    If iRet <> 0 Then
+	        'コマンド起動時エラー
+	        MsgBox oExec.Err
+	        Exit Sub
+	    End If
+
+	    If oExec.stdout = "ARGUMENT" Then
+	        msg = "Argument was passed successfully."
+	    Else
+	        msg = "Argument was'nt passed."
+	    End If
+
+	    msg = msg & Chr(13)
+	    If oServer.Data = "RETURN" Then
+	        msg = msg & "Return value was passed successfully."
+	    Else
+	        msg = msg & "Return value was'nt passed."
+	    End If
+
+	    iRet = oServer.Close
+	    If iRet <> 0 Then
+	        MsgBox oServer.Err
+	        Exit Sub
+	    End If
+	    Set oServer = Nothing
 
 	    MsgBox msg
-
 	End Sub
--->
