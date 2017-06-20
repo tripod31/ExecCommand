@@ -37,18 +37,41 @@ pingコマンドの出力を表示します。
 	Sub test()
 		Dim obj As Object
 		Dim iRet As Integer
-    
+
 		Set obj = CreateObject("ExecCommand.ExecCommand")
 		obj.exeFile = "ping.exe"
 		obj.arg = "localhost -n 1"
 		iRet = obj.Exec
-    
+
 		If iRet <> 0 Then
 			'コマンド起動時エラー
 			MsgBox obj.Err
 			Exit Sub
 		End If
-    
+
 		MsgBox "標準出力->" & obj.stdout & "<-" & vbCrLf & "標準エラー->" & obj.stderr & "<-"
-    
+
+	End Sub
+
+プロセス間通信
+
+	Sub test_remote()
+	    Dim obj As Object
+	    Dim iRet As Integer
+	    Dim msg As String
+
+	    Set obj = CreateObject("ExecCommand.ExecCommand")
+
+	    obj.InitRemoteServer
+	    obj.ServerData = "[server]hello!"
+
+	    'クライアント起動
+	    obj.ExeFile = "perl"
+	    obj.Arg = "test_client.pl"
+	    obj.Exec
+
+	    msg = "[server]client output:" & obj.stdout & vbCrLf & "[server]msg from client" & obj.ServerData
+
+	    MsgBox msg
+
 	End Sub
