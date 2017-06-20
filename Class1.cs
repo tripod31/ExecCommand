@@ -106,29 +106,33 @@ namespace ExecCommand
         // IPC関係
 
  
-        RemoteObject m_remoteObject;    // サーバー側共有オブジェクト
+        private RemoteObject m_remoteObject;    // サーバー側共有オブジェクト
+        private bool m_bInit = false;
 
         // サーバー側初期化
         public int InitRemoteServer()
         {
-            try
+            if (m_bInit == false)
             {
-                //サーバサイドのチャンネルを生成.
-                IpcServerChannel channel = new IpcServerChannel("vba-channel");
+                try
+                {
+                    //サーバサイドのチャンネルを生成.
+                    IpcServerChannel channel = new IpcServerChannel("vba-channel");
 
-                //チャンネルを登録.
-                ChannelServices.RegisterChannel(channel, true);
+                    //チャンネルを登録.
+                    ChannelServices.RegisterChannel(channel, true);
 
-                //やり取りするオブジェクトを生成して登録.
-                m_remoteObject = new RemoteObject();
-                RemotingServices.Marshal(m_remoteObject, "vba-data");
+                    //やり取りするオブジェクトを生成して登録.
+                    m_remoteObject = new RemoteObject();
+                    RemotingServices.Marshal(m_remoteObject, "vba-data");
+                }
+                catch (Exception e)
+                {
+                    this.err = "サーバー初期化時エラー:" + e.Message;
+                    return -1;
+                }
+                m_bInit = true;
             }
-            catch (Exception e)
-            {
-                this.err = "サーバー初期化時エラー:" + e.Message;
-                return -1;
-            }
-
             return 0;
 
         }
