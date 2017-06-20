@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ServiceModel;
 
 namespace ExecCommand
 {
@@ -45,6 +46,21 @@ namespace ExecCommand
 
     }
 
+    /// <summary>
+    /// IPC関係
+    /// </summary>
+
+    [ServiceContract]
+    public interface IMyContract
+    {
+        [OperationContract]
+        void SetData(string s);
+
+        [OperationContract]
+        string GetData();
+
+    }
+
     [Guid("28667748-9DCA-4D31-8A0F-FB4BEDBD08FF")]
     public interface IRemoteServer
     {
@@ -52,7 +68,6 @@ namespace ExecCommand
         {
             get;
         }
-
         string Data
         {
             get;
@@ -73,7 +88,7 @@ namespace ExecCommand
             get;
         }
 
-        string RemoteData
+        string Data
         {
             get;
             set;

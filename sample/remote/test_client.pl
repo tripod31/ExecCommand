@@ -8,7 +8,7 @@ if ($i!=0) {
     exit(-1);
 }
 
-my $msg=$obj->{"RemoteData"};
+my $msg=$obj->{"Data"};
 print sprintf("%s",$msg);
 #set remote data
-$obj->{"RemoteData"} = "RETURN";
+$obj->{"Data"} = "RETURN";

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Ipc;
+using System.ServiceModel;
 
 namespace ExecCommand
 {
@@ -100,39 +98,65 @@ namespace ExecCommand
     ///////////////////////////////////////////
     // IPC関係
 
-    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
-    [Guid("3FBDC9B0-6FCE-4E03-B5E0-EC3441DC7D6E")]
-    public class RemoteObject : MarshalByRefObject
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    public class MyServer : IMyContract
     {
-        public string Data { get; set; }
+        private string m_str;
+
+        public void SetData(string s)
+        {
+            m_str=s;
+        }
+
+        public string GetData()
+        {
+            return m_str;
+        }
     }
 
-    public class RemoteServer: IRemoteServer
+    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
+    [Guid("84cd29f0-c539-4b2d-82a8-345a54caac38")]
+    public class RemoteServer:IRemoteServer
     {
         private string err = "";
-        private RemoteObject m_remoteObject = null;    // サーバー側共有オブジェクト
-        private static IpcServerChannel m_channel = null;
+        private ServiceHost  m_host=null;
+        private MyServer m_server=null;
 
         public string Err
         {
             get { return this.err; }
         }
 
-        // サーバー側初期化
+        // データアクセスプロパティ
+        public string Data
+        {
+            get
+            {
+                return m_server.GetData();
+
+            }
+            set
+            {
+                m_server.SetData(value);
+ 
+            }
+        }
+
+        // 初期化
         public int Init()
         {
 
             try
             {
-                //サーバサイドのチャンネルを生成.
-                m_channel = new IpcServerChannel("vba-channel");
-
-                //チャンネルを登録.
-                ChannelServices.RegisterChannel(m_channel, true);
-
-                //やり取りするオブジェクトを生成して登録.
-                m_remoteObject = new RemoteObject();
-                RemotingServices.Marshal(m_remoteObject, "vba-data");
+                m_server = new MyServer();
+                m_host = new ServiceHost(
+                    m_server,
+                    new Uri("net.pipe://localhost"));
+                m_host.AddServiceEndpoint(
+                    typeof(IMyContract),
+                    new NetNamedPipeBinding(),
+                    "InterProcessCommunication");
+                m_host.Open();
             }
             catch (Exception e)
             {
@@ -143,13 +167,13 @@ namespace ExecCommand
 
         }
 
-        // サーバー側終了処理
+        // 終了処理
         public int Close()
         {
-            if (m_channel != null) {
+            if (m_host != null) {
                 try
                 {
-                    ChannelServices.UnregisterChannel(m_channel);
+                    m_host.Close();
                 }
                 catch (Exception e)
                 {
@@ -161,23 +185,12 @@ namespace ExecCommand
             return 0;
         }
 
-        // サーバー側データアクセスプロパティ
-        public string Data
-        {
-            get
-            {
-                return m_remoteObject.Data;
-            }
-            set
-            {
-                m_remoteObject.Data = value;
-            }
-        }
     }
 
     [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
     [Guid("F7039B5B-965F-4A74-8826-91C71BB48AAB")]
     public class RemoteClient:IRemoteClient {
+        private IMyContract m_server;
         private string err = "";
 
         public string Err
@@ -185,16 +198,15 @@ namespace ExecCommand
             get { return this.err; }
         }
 
-        // クライアント側初期化
+        // 初期化
         public int Init()
         {
             try
             {
-                //クライアントサイドのチャンネルを生成.
-                IpcClientChannel channel = new IpcClientChannel();
-
-                //チャンネルを登録
-                ChannelServices.RegisterChannel(channel, true);
+                m_server = new ChannelFactory<IMyContract>(
+                    new NetNamedPipeBinding(),
+                    new EndpointAddress("net.pipe://localhost/InterProcessCommunication")
+                    ).CreateChannel();
             }
             catch (Exception e)
             {
@@ -204,19 +216,14 @@ namespace ExecCommand
             return 0;
         }
 
-        // クライアント側データアクセスプロパティ
-        public string RemoteData
+        // データアクセスプロパティ
+        public string Data
         {
             get
             {
-                RemoteObject remoteObject;
                 try
                 {
-                    //リモートオブジェクトを取得
-                    //URIは"/チャンネル名/公開名"になる.
-                    remoteObject = Activator.GetObject
-                        (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
-                    return remoteObject.Data;
+                    return m_server.GetData();
                 }
                 catch (Exception e)
                 {
@@ -227,14 +234,9 @@ namespace ExecCommand
             }
             set
             {
-                RemoteObject remoteObject;
                 try
                 {
-                    //リモートオブジェクトを取得
-                    //URIは"/チャンネル名/公開名"になる.
-                    remoteObject = Activator.GetObject
-                        (typeof(RemoteObject), "ipc://vba-channel/vba-data") as RemoteObject;
-                    remoteObject.Data=value;
+                    m_server.SetData(value);
                 }
                 catch (Exception e)
                 {
