@@ -29,14 +29,14 @@ my $msg;
 $msg= $oExec->{StdOut};
 
 if ($msg eq "ARGUMENT"){
-    print sprintf("Argument[%s] was passed succeccfully.\n",$msg);
+    print sprintf("Argument[%s] was passed successfully.\n",$msg);
 }else{
     print sprintf("Argument was'nt passed.[%s]\n",$msg);
 }
 
 $msg = $oServer->{"Data"};
 if ($msg eq "RETURN"){
-    print sprintf("Return value[%s] was passed succeccfully.\n",$msg);
+    print sprintf("Return value[%s] was passed successfully.\n",$msg);
 }else{
     print sprintf("Return value was'nt passed.[%s]\n",$msg);
 }
