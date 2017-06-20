@@ -3,7 +3,7 @@ use strict;
 use Win32::OLE qw(in with);
 my $obj = Win32::OLE->new('ExecCommand.ExecCommand') ;
 $obj->InitRemoteServer();
-$obj->{"ServerData"}="This string was set by test_remote.pl";
+$obj->{"ServerData"}="ARGUMENT";
 
 #クライアント実行
 $obj->{ExeFile}="perl";
@@ -16,7 +16,15 @@ if ($i!=0) {
 
 my $msg;
 $msg= $obj->{StdOut};
-print "Following string is output by test_client.pl:$msg\n";
+if ($msg eq "ARGUMENT"){
+    print "Argument was passed succeccfully.\n";
+}else{
+    print "Argument was'nt passed.";
+}
 
 $msg = $obj->{"ServerData"};
-print "This string was read by test_remote.pl:$msg\n";
+if ($msg eq "RETURN"){
+    print "Return value was passed succeccfully.\n";
+}else{
+    print "Return value was'nt passed.";
+}
