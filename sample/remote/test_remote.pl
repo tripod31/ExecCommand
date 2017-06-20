@@ -2,12 +2,12 @@ use strict;
 
 use Win32::OLE qw(in with);
 my $oServer = Win32::OLE->new('ExecCommand.RemoteServer') ;
-my $i=$oServer->InitRemoteServer();
+my $i=$oServer->Init();
 if ($i !=0){
     print("err at init server:". $oServer->{Err});
     exit(-1);
 }
-$oServer->{"ServerData"}="ARGUMENT";
+$oServer->{"Data"}="ARGUMENT";
 
 #クライアント実行
 if (! -f "test_client.pl"){
@@ -34,9 +34,16 @@ if ($msg eq "ARGUMENT"){
     print sprintf("Argument was'nt passed.[%s]\n",$msg);
 }
 
-$msg = $oServer->{"ServerData"};
+$msg = $oServer->{"Data"};
 if ($msg eq "RETURN"){
     print sprintf("Return value[%s] was passed succeccfully.\n",$msg);
 }else{
     print sprintf("Return value was'nt passed.[%s]\n",$msg);
 }
+
+$i=$oServer->Close();
+if ($i !=0){
+    print("err at close server:". $oServer->{Err});
+    exit(-1);
+}
+

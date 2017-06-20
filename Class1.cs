@@ -107,7 +107,7 @@ namespace ExecCommand
         public string Data { get; set; }
     }
 
-    public class RemoteServer: IReomoteServer
+    public class RemoteServer: IRemoteServer
     {
         private string err = "";
         private RemoteObject m_remoteObject = null;    // サーバー側共有オブジェクト
@@ -119,7 +119,7 @@ namespace ExecCommand
         }
 
         // サーバー側初期化
-        public int InitRemoteServer()
+        public int Init()
         {
 
             try
@@ -144,7 +144,7 @@ namespace ExecCommand
         }
 
         // サーバー側終了処理
-        public int CloseRemoteServer()
+        public int Close()
         {
             if (m_channel != null) {
                 try
@@ -162,7 +162,7 @@ namespace ExecCommand
         }
 
         // サーバー側データアクセスプロパティ
-        public string ServerData
+        public string Data
         {
             get
             {
@@ -186,7 +186,7 @@ namespace ExecCommand
         }
 
         // クライアント側初期化
-        public int InitRemoteClient()
+        public int Init()
         {
             try
             {

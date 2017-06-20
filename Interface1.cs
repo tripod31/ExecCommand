@@ -46,21 +46,20 @@ namespace ExecCommand
     }
 
     [Guid("28667748-9DCA-4D31-8A0F-FB4BEDBD08FF")]
-    public interface IReomoteServer { 
-
-
+    public interface IRemoteServer
+    {
         string Err
         {
             get;
         }
 
-        string ServerData
+        string Data
         {
             get;
             set;
         }
-        int InitRemoteServer();
-        int CloseRemoteServer();
+        int Init();
+        int Close();
 
     }
 
@@ -79,7 +78,7 @@ namespace ExecCommand
             get;
             set;
         }
-        int InitRemoteClient();
+        int Init();
     }
 
 }
