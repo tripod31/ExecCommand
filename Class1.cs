@@ -142,6 +142,15 @@ namespace ExecCommand
             }
         }
 
+        // デストラクタ
+        ~RemoteServer()
+        {
+            if (m_host != null  && m_host.State != CommunicationState.Closed)
+            {
+                m_host.Close();
+            }
+        }
+
         // 初期化
         public int Init()
         {
