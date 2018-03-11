@@ -216,9 +216,9 @@ pip-log.txt
 .mr.developer.cfg
 
 #yoshi
+.vs
+/installer
 make_dist.*
 *.exe
 *.dll
 *.sln
-/installer
-.vs

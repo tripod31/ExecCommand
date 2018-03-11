@@ -18,16 +18,15 @@ Excel VBAからperlを起動して標準出力を得るためにWindowsScripting
 Windows10  
 Microsoft VisualStudio Express 2015forWindowsDesktop  
 .NET Framework 4.5(4.0向けにビルド)  
-Excel2007
+Excel2003
 
 インストール
 -----
 #### ファイルをダウンロードして展開
-「Download ZIP」のリンクからダウンロード
+execcommand.zipをクリック→Download
 
-#### DLLのレジストリへの登録
-regist_dll.batを実行する。WindowsVista以降の場合、管理者で実行。  
-バッチファイル中のregasm.exeのパスを修正する必要があるかも。  
+#### DLLのレジストリへの登録・登録解除
+installer.exeを実行する。WindowsVista以降の場合、管理者で実行。エラーが出ても、「型が正常に登録されました。」と表示されればOK  
 
 VBAからの使用例
 -----
@@ -56,58 +55,55 @@ pingコマンドの出力を表示します。
 #### プロセス間通信
 
 	Sub test_remote()
-	    Dim obj As Object
-	    Dim iRet As Integer
-	    Dim msg As String
-	    Dim sPath As String
-	    Dim sDir As String
-	    Dim oServer
-	    Dim oExec
+		Dim obj As Object
+		Dim iRet As Integer
+		Dim msg As String
+		Dim sPath As String
+		Dim sDir As String
+		Dim oServer
+		Dim oExec
+    
+		sDir = get_curdir
+		Set oServer = CreateObject("ExecCommand.RemoteServer")
+    
+		iRet = oServer.init
+			If iRet <> 0 Then
+			MsgBox oServer.Err
+			Exit Sub
+		End If
+        
+		oServer.Data = "ARGUMENT"
+    
+		'クライアント起動
+		Set oExec = CreateObject("ExecCommand.ExecCommand")
+		oExec.ExeFile = "perl"
+		oExec.Arg = sDir & "\remote\test_client.pl"
+		iRet = oExec.Exec
+		If iRet <> 0 Then
+			'コマンド起動時エラー
+			MsgBox oExec.Err
+			Exit Sub
+		End If
+    
+		If oExec.stdout = "ARGUMENT" Then
+			msg = "Argument was passed successfully."
+		Else
+			msg = "Argument was'nt passed."
+		End If
+    
+		msg = msg & Chr(13)
+		If oServer.Data = "RETURN" Then
+			msg = msg & "Return value was passed successfully."
+		Else
+			msg = msg & "Return value was'nt passed."
+		End If
 
-	    Set oServer = CreateObject("ExecCommand.RemoteServer")
+		iRet = oServer.Close
+		If iRet <> 0 Then
+			MsgBox oServer.Err
+			Exit Sub
+		End If
+		Set oServer = Nothing
 
-	    iRet = oServer.init
-	        If iRet <> 0 Then
-	        MsgBox oServer.Err
-	        Exit Sub
-	    End If
-
-	    oServer.Data = "ARGUMENT"
-
-	    'クライアント起動
-	    sPath = convertFromURL(ThisComponent.Location)
-	    sDir = Left(sPath, Len(sPath) - 9)
-	    'sDir = ThisWorkbook.Path
-
-	    Set oExec = CreateObject("ExecCommand.ExecCommand")
-	    oExec.ExeFile = "perl"
-	    oExec.Arg = sDir & "\remote\test_client.pl"
-	    iRet = oExec.Exec
-	    If iRet <> 0 Then
-	        'コマンド起動時エラー
-	        MsgBox oExec.Err
-	        Exit Sub
-	    End If
-
-	    If oExec.stdout = "ARGUMENT" Then
-	        msg = "Argument was passed successfully."
-	    Else
-	        msg = "Argument was'nt passed."
-	    End If
-
-	    msg = msg & Chr(13)
-	    If oServer.Data = "RETURN" Then
-	        msg = msg & "Return value was passed successfully."
-	    Else
-	        msg = msg & "Return value was'nt passed."
-	    End If
-
-	    iRet = oServer.Close
-	    If iRet <> 0 Then
-	        MsgBox oServer.Err
-	        Exit Sub
-	    End If
-	    Set oServer = Nothing
-
-	    MsgBox msg
+		MsgBox msg
 	End Sub
