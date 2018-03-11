@@ -216,5 +216,9 @@ pip-log.txt
 .mr.developer.cfg
 
 #yoshi
-make_zip.bat
+make_dist.*
+*.exe
+*.dll
+*.sln
+/installer
 .vs
