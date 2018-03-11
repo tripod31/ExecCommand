@@ -26,7 +26,7 @@ Excel2003
 execcommand.zipをクリック→Download
 
 #### DLLのレジストリへの登録・登録解除
-installer.exeを実行する。WindowsVista以降の場合、管理者で実行。エラーが出ても、「型が正常に登録されました。」と表示されればOK  
+installer.exeを実行する。WindowsVista以降の場合、管理者で実行。Excecommand.dllを指定し、registerボタンをクリック。エラーが出ても、「型が正常に登録されました。」と表示されればOK。登録解除はunregisterボタン。  
 
 VBAからの使用例
 -----
