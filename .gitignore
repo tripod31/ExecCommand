@@ -222,4 +222,3 @@ pip-log.txt
 make_dist.*
 *.exe
 *.dll
-*.sln
