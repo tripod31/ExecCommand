@@ -218,7 +218,6 @@ pip-log.txt
 #yoshi
 .vs
 .vscode
-/installer
 /temp
 make_dist.*
 *.exe
