@@ -1,2 +1,2 @@
-perl test_exec.pl
+python test_exec.py
 pause
