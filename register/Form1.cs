@@ -15,6 +15,9 @@ namespace register
         public Form1()
         {
             InitializeComponent();
+            // RegAsm のパスを取得
+            string path = System.IO.Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "RegAsm.exe");
+            this.textBox2.Text = path;
         }
 
         private string exec_regasm(string arg)
@@ -43,7 +46,13 @@ namespace register
                 p.Start();
 
                 // 出力を取得
-                msg = string.Format("出力:\n{0}\nエラー:\n{1}",p.StandardOutput.ReadToEnd(),p.StandardError.ReadToEnd());
+                string err = p.StandardError.ReadToEnd();
+                if (err.Length == 0)
+                {
+                    err = "None";
+                }
+                msg = string.Format("出力:\n{0}\nエラー:\n{1}\n",p.StandardOutput.ReadToEnd(),err);
+                
                 // プロセス終了まで待機する
                 p.WaitForExit();
                 p.Close();
