@@ -221,4 +221,5 @@ pip-log.txt
 /temp
 make_dist.*
 *.exe
+*.exe.config
 *.dll
