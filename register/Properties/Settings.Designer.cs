@@ -22,5 +22,17 @@ namespace register.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ExecCommand.dll")]
+        public string dll_path {
+            get {
+                return ((string)(this["dll_path"]));
+            }
+            set {
+                this["dll_path"] = value;
+            }
+        }
     }
 }

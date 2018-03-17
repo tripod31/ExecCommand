@@ -88,5 +88,11 @@ namespace register
                 this.textBox1.Text = this.openFileDialog1.FileName;
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // save settings
+            Properties.Settings.Default.Save();
+        }
     }
 }
