@@ -27,12 +27,12 @@ execcommand.zipをクリック→Download
 
 #### DLLのレジストリへの登録・登録解除
 register.exeを実行する。DLLがregister.exeと違うディレクトリにある場合、パスを指定する。registerボタンをクリック。エラーが出ても、「型が正常に登録されました。」と表示されればOK。登録解除はunregisterボタン。  
-64bitOSで32bitプログラムからDLLを使用するには、register32を使用してDLLを登録する。
+64bitOSで32bitプログラムからDLLを使用するには、register32.exeを使用してDLLを登録する。
 
 変更履歴
 -----
 #### 2018/03/17
-64bitOSで32bitプログラムからDLLを使用するには、register32を使用してDLLを登録する。
+64bitOSで32bitプログラムからDLLを使用するには、register32.exeを使用してDLLを登録する。
 
 VBAからの使用例
 -----
