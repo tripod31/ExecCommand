@@ -51,7 +51,7 @@ namespace register
                 {
                     err = "None";
                 }
-                msg = string.Format("出力:\n{0}\nエラー:\n{1}\n",p.StandardOutput.ReadToEnd(),err);
+                msg = string.Format("output:\n{0}\nerror:\n{1}\n",p.StandardOutput.ReadToEnd(),err);
                 
                 // プロセス終了まで待機する
                 p.WaitForExit();
@@ -93,6 +93,24 @@ namespace register
         {
             // save settings
             Properties.Settings.Default.Save();
+        }
+
+        // regfileボタン
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string file="";
+            if (IntPtr.Size == 4)
+            {
+                //32bitで動作時
+                file = "execcommand32bit.reg";
+            }
+            else if (IntPtr.Size == 8)
+            {
+                //64bitで動作時
+                file = "execcommand64bit.reg";
+            }
+            string msg = exec_regasm(string.Format("/codebase \"{0}\" /regfile:{1}", this.textBox1.Text,file));
+            MessageBox.Show(string.Format("{0}\n{1} created.\n",msg,file));
         }
     }
 }
