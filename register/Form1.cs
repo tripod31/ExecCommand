@@ -98,19 +98,20 @@ namespace register
         // regfileボタン
         private void button4_Click(object sender, EventArgs e)
         {
-            string file="";
-            if (IntPtr.Size == 4)
+            this.saveFileDialog1.Filter = "reg|*.reg";
+            this.saveFileDialog1.InitialDirectory = System.Environment.CurrentDirectory;
+
+            DialogResult dr = this.saveFileDialog1.ShowDialog();
+            if (dr != DialogResult.OK)
             {
-                //32bitで動作時
-                file = "execcommand32bit.reg";
+                return;
             }
-            else if (IntPtr.Size == 8)
-            {
-                //64bitで動作時
-                file = "execcommand64bit.reg";
-            }
-            string msg = exec_regasm(string.Format("/codebase \"{0}\" /regfile:{1}", this.textBox1.Text,file));
-            MessageBox.Show(string.Format("{0}\n{1} created.\n",msg,file));
+
+            string msg = exec_regasm(
+                string.Format("/codebase \"{0}\" /regfile:\"{1}\"", 
+                this.textBox1.Text,
+                this.saveFileDialog1.FileName));
+            MessageBox.Show(string.Format("{0}\n{1} created.\n",msg, this.saveFileDialog1.FileName));
         }
     }
 }
