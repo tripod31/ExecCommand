@@ -51,6 +51,7 @@ namespace ExecCommand
     /// </summary>
 
     [ServiceContract]
+    [Guid("0A6098E2-A18B-44AB-854C-14A8053D8F8A")]
     public interface IMyContract
     {
         [OperationContract]

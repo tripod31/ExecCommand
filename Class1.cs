@@ -99,6 +99,7 @@ namespace ExecCommand
     // IPC関係
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [Guid("3A333C36-6BC9-4CEE-A100-92F286EF6AA9")]
     public class MyServer : IMyContract
     {
         private string m_str;
