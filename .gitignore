@@ -219,7 +219,7 @@ pip-log.txt
 .vs
 .vscode
 /temp
-make_dist.*
+make_zip.*
 *.exe
 *.exe.config
 *.dll

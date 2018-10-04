@@ -62,7 +62,9 @@ pingコマンドの出力を表示します。
 	End Sub
 
 #### プロセス間通信
+VBAから"ARGUMENT"という文字列を引数でperlプログラム(test_client.pl)に渡し、"RETURN"という文字列を返り値でもらうサンプル。
 
+##### VBA側
 	Sub test_remote()
 		Dim obj As Object
 		Dim iRet As Integer
@@ -117,3 +119,19 @@ pingコマンドの出力を表示します。
 		MsgBox msg
 	End Sub
 
+##### test_client.pl
+	
+	use strict;
+	use Win32::OLE qw(in with);
+
+	my $obj = Win32::OLE->new('ExecCommand.RemoteClient') ;
+	my $i=$obj->Init();
+	if ($i!=0) {
+		print(sprintf("err at init client:%s\n",$obj->{Err}));
+		exit(-1);
+	}
+
+	my $msg=$obj->{"Data"};
+	print sprintf("%s",$msg);
+	#set remote data
+	$obj->{"Data"} = "RETURN";
