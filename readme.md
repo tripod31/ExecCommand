@@ -13,7 +13,7 @@ LibreOfficeのマクロからCUIコマンドを起動して標準出力を得る
 ## 開発・動作確認環境
 Windows11 64bit  
 Microsoft VisualStudio Community 2022 64bit  
-.NET Framework 4.8
+.NET Framework 4.8  
 LibleOffice7.4.5.1 64bit  
 
 ## インストール
