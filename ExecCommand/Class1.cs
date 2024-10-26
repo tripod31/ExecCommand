@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.IO.MemoryMappedFiles;
-using System.Runtime.CompilerServices;
 
 namespace ExecCommand
 {
 
-    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
+    [ClassInterface(ClassInterfaceType.None)]
     [Guid("098F1F11-4B55-4D66-A5FE-AD4EF0245D34")]
     public class ExecCommand : IExecCommand
     {
@@ -94,42 +93,47 @@ namespace ExecCommand
 
     // IPC関係
     // 共有データ
-    [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
+    [ClassInterface(ClassInterfaceType.None)]
     [Guid("F30365B5-34E2-4B62-A282-1EA2D2C69212")]
     public class SharedData : ISharedData
     {
-        private const string SHARED_MEMORY_NAME = "shared_memory";
+        private const string SHARED_MEMORY_NAME = "ExecCommand";
+        private const int SHARED_MEMORY_SIZE = 1024 * 1024;
 
         // 共有メモリに文字列を書き込む
+        // 先頭にデータ長（int32）、続いてデータ
         public void SetData(string str)
         {
-            // Open shared memory
-            MemoryMappedFile share_mem = MemoryMappedFile.CreateOrOpen(SHARED_MEMORY_NAME, 1024);
+            // 共有メモリをオープン。既に同じ名前のメモリがあればそれを開く
+            MemoryMappedFile share_mem = MemoryMappedFile.CreateOrOpen(SHARED_MEMORY_NAME, SHARED_MEMORY_SIZE);
             MemoryMappedViewAccessor accessor = share_mem.CreateViewAccessor();
 
-            // Write data to shared memory
+            // 共有メモリに文字列を書き込む
             char[] data = str.ToCharArray();
             accessor.Write(0, data.Length);
-            accessor.WriteArray<char>(sizeof(int), data, 0, data.Length);
+            int length = data.Length;
+            if (length + sizeof(int) > SHARED_MEMORY_SIZE){
+                // データサイズが共有メモリサイズを超えた場合は、超えた分のデータを切り捨てる
+                length = SHARED_MEMORY_SIZE - sizeof(int);
+            }
+            accessor.WriteArray<char>(sizeof(int), data, 0, length);
 
-            // Dispose accessor
             accessor.Dispose();
         }
 
         // 共有メモリから文字列を取得
         public string GetData()
         {
-            // Open shared memory
+            // 共有メモリをオープン
             MemoryMappedFile share_mem = MemoryMappedFile.OpenExisting(SHARED_MEMORY_NAME);
             MemoryMappedViewAccessor accessor = share_mem.CreateViewAccessor();
 
-            // Write data to shared memory
+            // データを読む
             int size = accessor.ReadInt32(0);
             char[] data = new char[size];
             accessor.ReadArray<char>(sizeof(int), data, 0, data.Length);
             string str = new string(data);
 
-            // Dispose resource
             accessor.Dispose();
             share_mem.Dispose();
 
