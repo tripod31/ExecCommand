@@ -1,5 +1,3 @@
-geany_run_script.bat
-
 #################
 ## Eclipse
 #################
@@ -225,3 +223,4 @@ make_zip.*
 *.exe.config
 *.dll
 *.snk
+memo.txt

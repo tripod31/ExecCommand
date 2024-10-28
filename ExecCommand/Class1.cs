@@ -122,22 +122,30 @@ namespace ExecCommand
         }
 
         // 共有メモリから文字列を取得
+        // 戻り値：
+        // 文字列。エラー発生時はエラー内容
         public string GetData()
         {
-            // 共有メモリをオープン
-            MemoryMappedFile share_mem = MemoryMappedFile.OpenExisting(SHARED_MEMORY_NAME);
-            MemoryMappedViewAccessor accessor = share_mem.CreateViewAccessor();
+            string ret;
+            try{           
+                // 共有メモリをオープン
+                MemoryMappedFile share_mem;
+                share_mem = MemoryMappedFile.OpenExisting(SHARED_MEMORY_NAME);
+                MemoryMappedViewAccessor accessor = share_mem.CreateViewAccessor();
 
-            // データを読む
-            int size = accessor.ReadInt32(0);
-            char[] data = new char[size];
-            accessor.ReadArray<char>(sizeof(int), data, 0, data.Length);
-            string str = new string(data);
+                // データを読む
+                int size = accessor.ReadInt32(0);
+                char[] data = new char[size];
+                accessor.ReadArray<char>(sizeof(int), data, 0, data.Length);
+                ret = new string(data);
 
-            accessor.Dispose();
-            share_mem.Dispose();
+                accessor.Dispose();
+                share_mem.Dispose();
 
-            return str;
+            } catch (Exception e){
+                ret = "GetDataでエラー："+e.Message;
+            }
+            return ret;
         }
     }
 }
