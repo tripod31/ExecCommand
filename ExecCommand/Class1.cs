@@ -118,7 +118,6 @@ namespace ExecCommand
             }
             accessor.WriteArray<char>(sizeof(int), data, 0, length);
 
-            //share_mem.Dispose();
             accessor.Dispose();
         }
 
@@ -140,7 +139,6 @@ namespace ExecCommand
                 accessor.ReadArray<char>(sizeof(int), data, 0, data.Length);
                 ret = new string(data);
 
-                //share_mem.Dispose();
                 accessor.Dispose();
             } catch (Exception e){
                 ret = "GetDataでエラー："+e.Message;
