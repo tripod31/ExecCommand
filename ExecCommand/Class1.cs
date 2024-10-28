@@ -101,11 +101,11 @@ namespace ExecCommand
         private const int SHARED_MEMORY_SIZE = 1024 * 1024;
 
         // 共有メモリに文字列を書き込む
-        // 先頭にデータ長（int32）、続いてデータ
+        // 先頭にデータ長（int32）、続いて文字列
         public void SetData(string str)
         {
             // 共有メモリをオープン。既に同じ名前のメモリがあればそれを開く
-            MemoryMappedFile share_mem = MemoryMappedFile.CreateOrOpen(SHARED_MEMORY_NAME, SHARED_MEMORY_SIZE);
+            MemoryMappedFile　share_mem = MemoryMappedFile.CreateOrOpen(SHARED_MEMORY_NAME, SHARED_MEMORY_SIZE);
             MemoryMappedViewAccessor accessor = share_mem.CreateViewAccessor();
 
             // 共有メモリに文字列を書き込む
@@ -118,6 +118,7 @@ namespace ExecCommand
             }
             accessor.WriteArray<char>(sizeof(int), data, 0, length);
 
+            //share_mem.Dispose();
             accessor.Dispose();
         }
 
@@ -139,9 +140,8 @@ namespace ExecCommand
                 accessor.ReadArray<char>(sizeof(int), data, 0, data.Length);
                 ret = new string(data);
 
+                //share_mem.Dispose();
                 accessor.Dispose();
-                share_mem.Dispose();
-
             } catch (Exception e){
                 ret = "GetDataでエラー："+e.Message;
             }
